@@ -1,0 +1,12 @@
+/target/
+target/
+.classpath
+.project
+.mvn/
+/.mvn/
+.settings/
+/.settings/
+/trash/
+trash/
+
+*.class
