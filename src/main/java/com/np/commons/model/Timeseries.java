@@ -88,6 +88,11 @@ public class Timeseries
     
     public void emplace(final String fieldName, final Object value, final Long timestamp) throws Exception
     {
+        if (value == null)
+        {
+            throw new Exception("error: does not admit null value.");
+        }
+        
         int fPosition = 0;
         if ((fPosition = this.getFieldPositionByFieldName(fieldName)) == -1)
         {
@@ -101,6 +106,11 @@ public class Timeseries
     
     public void emplaceAt(final String fieldName, final Object value, int position, final Long timestamp) throws Exception
     {
+        if (value == null)
+        {
+            throw new Exception("error: does not admit null value.");
+        }
+        
         int fPosition = 0;
         if ((fPosition = this.getFieldPositionByFieldName(fieldName)) == -1)
         {

@@ -1,5 +1,7 @@
 package com.np.commons.utils;
 
+import java.util.Date;
+
 public class Utils 
 {
 	static private Utils utils = null;
@@ -28,6 +30,18 @@ public class Utils
 
 		return sIn.hashCode() >= 0 ? 
 				"p".concat(String.valueOf(sIn.hashCode())) : "n".concat(String.valueOf(sIn.hashCode()).substring(1));
+	}
+	
+	@SuppressWarnings("deprecation")
+    public String formatDate(String format, Long timestamp) 
+	{
+	    if (format.equals("YY-mm-dd"))
+	    {
+	        Date date = new Date(timestamp);
+	        String month = date.getMonth()+1 < 10 ? "0".concat(String.valueOf(date.getMonth()+1)) : String.valueOf(date.getMonth()+1);
+            String dayOfMonth = date.getDate() < 10 ? "0".concat(String.valueOf(date.getDate())) : String.valueOf(date.getDate());
+	        return String.valueOf(date.getYear()+1900).concat("-").concat(String.valueOf(month)).concat("-").concat(dayOfMonth);
+	    } else return null;
 	}
 	
 	public static void main(String [] args) throws Exception

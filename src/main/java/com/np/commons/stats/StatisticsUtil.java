@@ -21,7 +21,7 @@ public class StatisticsUtil extends DescriptiveStatistics
         super(3);
     }
     
-    public Timeseries getMovingAverage(Timeseries timeseries, final int windowSize) throws Exception 
+    public Timeseries getMovingAverage(String dateFieldName, Timeseries timeseries, final int windowSize) throws Exception 
     {
         final Timeseries avgTimeseries = new Timeseries(timeseries.fields, (timeseries.timestamps.length - windowSize + 1));
         
@@ -37,16 +37,22 @@ public class StatisticsUtil extends DescriptiveStatistics
             int vIndex = 0;
             for (int valueIndex = 0; valueIndex < ds.getWindowSize(); valueIndex++)
             {
-                ds.addValue((Double) timeseries.values[fieldIndex][valueIndex]);
-                vIndex = valueIndex;
+                if (!timeseries.fields[fieldIndex].equalsIgnoreCase(dateFieldName)) 
+                {
+                    ds.addValue(Double.valueOf(timeseries.values[fieldIndex][valueIndex].toString()));
+                    vIndex = valueIndex;
+                }
             }
             
             avgTimeseries.emplaceAt(timeseries.fields[fieldIndex], ds.getMean(), (vIndex - windowSize + 1), timeseries.timestamps[vIndex]);
             
             for (int valueIndex = ds.getWindowSize(); valueIndex < timeseries.values[fieldIndex].length; valueIndex++)
             {
-                ds.addValue((Double) timeseries.values[fieldIndex][valueIndex]);
-                avgTimeseries.emplaceAt(timeseries.fields[fieldIndex], ds.getMean(), (valueIndex - windowSize + 1), timeseries.timestamps[valueIndex]);
+                if (!timeseries.fields[fieldIndex].equalsIgnoreCase(dateFieldName)) 
+                {
+                    ds.addValue(Double.valueOf(timeseries.values[fieldIndex][valueIndex].toString()));
+                    avgTimeseries.emplaceAt(timeseries.fields[fieldIndex], ds.getMean(), (valueIndex - windowSize + 1), timeseries.timestamps[valueIndex]);
+                }
             }
             
             ds.clear();
@@ -125,7 +131,7 @@ public class StatisticsUtil extends DescriptiveStatistics
         timeseries.emplace("infected", new Double(9D), 4L);
         
         int windowSize = 3;
-        Timeseries avgTimeseries = new StatisticsUtil(windowSize).getMovingAverage(timeseries, windowSize);
+        Timeseries avgTimeseries = new StatisticsUtil(windowSize).getMovingAverage("date",timeseries, windowSize);
         
         System.out.println(printMovingAverage(avgTimeseries));
     }
