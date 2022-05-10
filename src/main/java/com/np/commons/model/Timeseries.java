@@ -7,7 +7,7 @@ public class Timeseries
 {
     final public String [] fields;
     final public Long [] timestamps;
-    final public Object [][] values;
+    final public Double [][] values;
     
     final private Integer capacity;
     final private Integer positions [];
@@ -16,13 +16,13 @@ public class Timeseries
     {
         this.fields = new String[fields.length];
         this.timestamps = new Long[capacity];
-        this.values = new Object[this.fields.length][];
+        this.values = new Double[this.fields.length][];
         this.positions = new Integer[fields.length];
         
         for (int index = 0; index < fields.length; index++) 
         {
             this.fields[index] = fields[index];
-            this.values[index] = new Object[capacity];
+            this.values[index] = new Double[capacity];
             this.positions[index] = 0;
             
             Arrays.fill(this.values[index], null);
@@ -31,32 +31,32 @@ public class Timeseries
         this.capacity = capacity;
     }
     
-    public Timeseries (String [] fields, Object[][] values) throws Exception 
+    public Timeseries (String [] fields, Double[][] values) throws Exception 
     {
         if (values.length > 0 && values[0].length > 0)
         {
             this.fields = new String[fields.length];
             this.timestamps = new Long[values[0].length];
-            this.values = new Object[this.fields.length][];
+            this.values = new Double[this.fields.length][];
             this.positions = new Integer[fields.length];
             
             this.fields[0] = fields[0];
-            this.values[0] = new Object[values[0].length];
+            this.values[0] = new Double[values[0].length];
             this.positions[0] = 0;
             
             Arrays.fill(this.values[0], null);
-            Arrays.fill(Arrays.stream(this.values[0]).toArray(Object[]::new), values[0]);
+            Arrays.fill(Arrays.stream(this.values[0]).toArray(Double[]::new), values[0]);
             
             for (int index = 1; index < fields.length; index++) 
             {
                 if (this.values[0].length == values[index].length)
                 {
                     this.fields[index] = fields[index];
-                    this.values[index] = new Object[values[0].length];
+                    this.values[index] = new Double[values[0].length];
                     this.positions[index] = 0;
                     
                     Arrays.fill(this.values[index], null);
-                    Arrays.fill(Arrays.stream(this.values[index]).toArray(Object[]::new), values[index]);
+                    Arrays.fill(Arrays.stream(this.values[index]).toArray(Double[]::new), values[index]);
                 }
                 else
                 {
@@ -86,7 +86,7 @@ public class Timeseries
         return -1;
     }
     
-    public void emplace(final String fieldName, final Object value, final Long timestamp) throws Exception
+    public void emplace(final String fieldName, final Double value, final Long timestamp) throws Exception
     {
         if (value == null)
         {
@@ -104,7 +104,7 @@ public class Timeseries
         this.positions[fPosition]++;
     }
     
-    public void emplaceAt(final String fieldName, final Object value, int position, final Long timestamp) throws Exception
+    public void emplaceAt(final String fieldName, final Double value, int position, final Long timestamp) throws Exception
     {
         if (value == null)
         {
@@ -126,7 +126,7 @@ public class Timeseries
         this.timestamps[position] = timestamp;
     }
     
-    public Stream<Object> getStream(final String fieldName) throws Exception
+    public Stream<Double> getStream(final String fieldName) throws Exception
     {
         int fPosition = 0;
         if ((fPosition = this.getFieldPositionByFieldName(fieldName)) == -1)
