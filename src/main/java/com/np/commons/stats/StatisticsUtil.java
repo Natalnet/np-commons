@@ -1,5 +1,6 @@
 package com.np.commons.stats;
 
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -45,11 +46,28 @@ public class StatisticsUtil
             
             int limit = this.windowSize - 1;
             
-            for (int valueIdx = 0; valueIdx < limit; valueIdx++)
+            int valueIdx_ = 0;
+            try
             {
-                addData(timeseries.values[fieldIndex][valueIdx]);
-                
-                avgTimeseries.emplaceAt(timeseries.fields[fieldIndex], timeseries.values[fieldIndex][valueIdx], valueIdx, timeseries.timestamps[valueIdx]);
+                for (int valueIdx = 0; valueIdx < limit; valueIdx++)
+                {
+                    valueIdx_ = valueIdx;
+                    addData(timeseries.values[fieldIndex][valueIdx]);
+                    
+                    avgTimeseries.emplaceAt(timeseries.fields[fieldIndex], timeseries.values[fieldIndex][valueIdx], valueIdx, timeseries.timestamps[valueIdx]);
+                }
+            }
+            catch (Exception e)
+            {
+                System.out.println("fieldIndex: "+fieldIndex);
+                System.out.println("valueIdx: "+valueIdx_);
+                System.out.println("timeseries.values["+fieldIndex+"].length: "+timeseries.values[fieldIndex].length);
+                System.out.println("timeseries.values["+fieldIndex+"]["+valueIdx_+"]: "+timeseries.values[fieldIndex][valueIdx_]);
+                System.out.println("timeseries.fields["+fieldIndex+"]: "+timeseries.fields[fieldIndex]);
+                System.out.println("timeseries.timestamps["+valueIdx_+"]: "+timeseries.timestamps[valueIdx_]);
+                System.out.println("Date: "+new Date(timeseries.timestamps[valueIdx_]));
+                e.printStackTrace();
+                throw e;
             }
             
             final int timeseriesLength = timeseries.values[fieldIndex].length;
